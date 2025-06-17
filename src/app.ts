@@ -4,6 +4,7 @@ import dotenv from 'dotenv';
 import cors from 'cors';
 import authRouter from './routes/auth'
 import usersRouter from './routes/users';
+import orgNodesRouter from './routes/orgnodes';
 
 dotenv.config();
 
@@ -24,6 +25,7 @@ mongoose.connect(MONGODB_URI)
 
 app.use('/api/auth', authRouter);
 app.use('/api/users', usersRouter);
+app.use('/api/orgnodes', orgNodesRouter);
 
 app.listen(PORT, () => {
     console.log(`Server started on port ${PORT}`);
