@@ -30,12 +30,27 @@ export const listUsers = async (req: Request, res: Response) => {
     const allowedNodeIds = await getDescendantNodeIds(currentUser.nodeId);
 
     let filter: any = { nodeId: { $in: allowedNodeIds } };
+
+    // Enforce access control: who can see what
     if (currentUser.role === 'employee') {
         filter.role = 'employee';
     } else if (currentUser.role === 'manager') {
         filter.role = { $in: ['employee', 'manager'] };
     }
-    // Admin: no role filter
+
+    // Extra filtering via query params (admin, manager)
+    const { role } = req.query;
+    if (role && ['employee', 'manager'].includes(role as string)) {
+        // If currentUser is allowed to see this role, narrow further
+        if (
+            currentUser.role === 'admin' ||
+            (currentUser.role === 'manager' && role === 'employee') ||
+            (currentUser.role === 'manager' && role === 'manager')
+        ) {
+            filter.role = role;
+        }
+    }
+
     const users = await User.find(filter).select('-password');
     res.json(users);
 };
