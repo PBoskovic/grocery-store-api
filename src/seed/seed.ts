@@ -8,6 +8,8 @@ dotenv.config();
 
 const MONGODB_URI = process.env.MONGODB_URI || 'mongodb://localhost:27017/grocery-store';
 
+const SEED_USER_PASSWORD = process.env.SEED_USER_PASSWORD || 'password123';
+
 
 async function seed() {
     await connectMongo(MONGODB_URI);
@@ -50,7 +52,9 @@ async function seed() {
     nodes['Radnja 9'] = await new OrgNode({ name: 'Radnja 9', type: 'store', parentId: nodes['Crveni krst']._id }).save();
 
     // Create users: a manager and employee at several nodes
-    const password = await bcrypt.hash('password123', 10);
+    const password = SEED_USER_PASSWORD;
+
+    await new User({ email: 'superuser@example.com', name: 'Super user', password, role: 'admin', nodeId: nodes['Srbija']._id }).save();
 
     // Managers at high-level nodes
     await new User({ email: 'vojvodina.manager@example.com', name: 'Manager Vojvodina', password, role: 'manager', nodeId: nodes['Vojvodina']._id }).save();
