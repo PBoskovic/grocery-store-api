@@ -2,6 +2,7 @@ import express from 'express';
 import mongoose from 'mongoose';
 import dotenv from 'dotenv';
 import cors from 'cors';
+import authRouter from './routes/auth'
 
 dotenv.config();
 
@@ -20,11 +21,7 @@ mongoose.connect(MONGODB_URI)
         process.exit(1);
     });
 
-// --- Example base route ---
-app.get('/', (req, res) => {
-    res.json({ message: 'OrgTree API up and running!' });
-});
-
+app.use('/api/auth', authRouter);
 
 app.listen(PORT, () => {
     console.log(`Server started on port ${PORT}`);
