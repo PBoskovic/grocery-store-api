@@ -1,5 +1,5 @@
 import {createUserValidator, updateUserValidator} from '../validators/users.validator';
-import { validateRequest } from '../middleware/validateRequest';
+import {filterBody, validateRequest} from '../middleware/validateRequest';
 import { Router } from 'express';
 import { authenticateJWT } from '../middleware/auth';
 import {
@@ -8,6 +8,7 @@ import {
     createUser,
     updateUser,
     deleteUser,
+    changePassword,
 } from '../controllers/users.controller';
 import {asyncHandler} from "../utils/asyncHandler";
 
@@ -22,9 +23,11 @@ router.post('/',
     validateRequest,
     asyncHandler(createUser));
 router.put('/:id',
+    filterBody(['name', 'email', 'role', 'nodeId']),
     updateUserValidator,
     validateRequest,
     asyncHandler(updateUser));
 router.delete('/:id', asyncHandler(deleteUser));
+router.patch('/:id/password', asyncHandler(changePassword));
 
 export default router;

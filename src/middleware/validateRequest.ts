@@ -1,5 +1,6 @@
 import { Request, Response, NextFunction } from 'express';
 import { validationResult } from 'express-validator';
+import {pickFields} from "../utils/pickFields";
 
 export function validateRequest(
     req: Request,
@@ -12,4 +13,11 @@ export function validateRequest(
         return;
     }
     next();
+}
+
+export function filterBody(allowedFields: string[]) {
+    return (req: Request, res: Response, next: NextFunction) => {
+        req.body = pickFields(req.body, allowedFields);
+        next();
+    };
 }

@@ -3,6 +3,7 @@ import User from '../models/User';
 import {AuthUser} from "../types/authuser";
 import {canAccessTargetUser} from "../utils/canAccessTargetUser";
 import {getDescendantNodeIds} from "../utils/getDescendantNodeIds";
+import bcrypt from "bcryptjs";
 
 
 // Get one user
@@ -83,7 +84,7 @@ export const updateUser = async (req: Request, res: Response) => {
         }
     }
 
-    // Optionally restrict what fields can be changed
+
     Object.assign(targetUser, req.body);
     await targetUser.save();
     const { password, ...data } = targetUser.toObject();
@@ -107,3 +108,29 @@ export const deleteUser = async (req: Request, res: Response) => {
     await targetUser.deleteOne();
     res.status(204).send();
 };
+
+
+export const changePassword = async (req: Request, res: Response) => {
+    const currentUser = req.user as AuthUser;
+    const targetUser = await User.findById(req.params.id);
+    if (!targetUser) return res.status(404).json({ error: 'User not found' });
+
+    // Only allow user themselves, or admin, to change password
+    if (currentUser.role !== 'admin' && currentUser.userId !== targetUser.id) {
+        return res.status(403).json({ error: 'Forbidden' });
+    }
+
+    // Require old password if user is not admin
+    if (currentUser.role !== 'admin') {
+        const { oldPassword, newPassword } = req.body;
+        const valid = await bcrypt.compare(oldPassword, targetUser.password);
+        if (!valid) return res.status(401).json({ error: 'Old password incorrect' });
+        targetUser.password = newPassword;
+    } else {
+        targetUser.password = req.body.newPassword;
+    }
+
+    await targetUser.save();
+    res.json({ success: true });
+};
+
