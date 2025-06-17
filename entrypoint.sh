@@ -8,5 +8,12 @@ if [ "$SEED_DB" = "true" ]; then
   npx ts-node src/seed/seed.ts
 fi
 
-echo "Starting backend server..."
-npx ts-node src/app.ts
+if [ "$NODE_ENV" = "development" ]; then
+  echo "Starting backend in DEV mode (hot reload)..."
+  npx nodemon --watch src --ext ts --exec ts-node src/app.ts
+else
+  echo "Building TypeScript for production..."
+  npm run build
+  echo "Starting backend in PRODUCTION mode..."
+  npm run start
+fi

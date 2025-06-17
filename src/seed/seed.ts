@@ -50,17 +50,17 @@ async function seed() {
     nodes['Radnja 9'] = await new OrgNode({ name: 'Radnja 9', type: 'store', parentId: nodes['Crveni krst']._id }).save();
 
     // Create users: a manager and employee at several nodes
-    const passwordHash = await bcrypt.hash('password123', 10);
+    const password = await bcrypt.hash('password123', 10);
 
     // Managers at high-level nodes
-    await new User({ email: 'vojvodina.manager@example.com', name: 'Manager Vojvodina', passwordHash, role: 'manager', nodeId: nodes['Vojvodina']._id }).save();
-    await new User({ email: 'beograd.manager@example.com', name: 'Manager Beograd', passwordHash, role: 'manager', nodeId: nodes['Grad Beograd']._id }).save();
-    await new User({ email: 'novisad.manager@example.com', name: 'Manager Novi Sad', passwordHash, role: 'manager', nodeId: nodes['Novi Sad']._id }).save();
+    await new User({ email: 'vojvodina.manager@example.com', name: 'Manager Vojvodina', password, role: 'manager', nodeId: nodes['Vojvodina']._id }).save();
+    await new User({ email: 'beograd.manager@example.com', name: 'Manager Beograd', password, role: 'manager', nodeId: nodes['Grad Beograd']._id }).save();
+    await new User({ email: 'novisad.manager@example.com', name: 'Manager Novi Sad', password, role: 'manager', nodeId: nodes['Novi Sad']._id }).save();
 
     // Employees at selected stores
-    await new User({ email: 'radnja1.employee@example.com', name: 'Employee Radnja 1', passwordHash, role: 'employee', nodeId: nodes['Radnja 1']._id }).save();
-    await new User({ email: 'radnja4.employee@example.com', name: 'Employee Radnja 4', passwordHash, role: 'employee', nodeId: nodes['Radnja 4']._id }).save();
-    await new User({ email: 'radnja9.employee@example.com', name: 'Employee Radnja 9', passwordHash, role: 'employee', nodeId: nodes['Radnja 9']._id }).save();
+    await new User({ email: 'radnja1.employee@example.com', name: 'Employee Radnja 1', password, role: 'employee', nodeId: nodes['Radnja 1']._id }).save();
+    await new User({ email: 'radnja4.employee@example.com', name: 'Employee Radnja 4', password, role: 'employee', nodeId: nodes['Radnja 4']._id }).save();
+    await new User({ email: 'radnja9.employee@example.com', name: 'Employee Radnja 9', password, role: 'employee', nodeId: nodes['Radnja 9']._id }).save();
 
     console.log('Seeded organizational tree and demo users as per the diagram!');
     await disconnectMongo();

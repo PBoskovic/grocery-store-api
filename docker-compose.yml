@@ -16,7 +16,9 @@ services:
       - mongo
     ports:
       - "3000:3000"
-    command: ["sh", "entrypoint.sh"]
+    # Only for development purposes, if deployed should be removed, or separate docker-compose created
+    volumes:
+      - .:/app
 
 volumes:
   mongo_data:
