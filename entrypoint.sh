@@ -10,7 +10,7 @@ fi
 
 if [ "$NODE_ENV" = "development" ]; then
   echo "Starting backend in DEV mode (hot reload)..."
-  npx nodemon --watch src --ext ts --exec ts-node src/app.ts
+  npm run dev
 else
   echo "Building TypeScript for production..."
   npm run build

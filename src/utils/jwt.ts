@@ -1,12 +1,18 @@
 import jwt from 'jsonwebtoken';
+import {AuthUser} from "../types/authuser";
 
 const JWT_SECRET = process.env.JWT_SECRET || 'secret';
 
 export function signJwt(payload: string | Buffer | object, expiresIn?: string) {
     const exp = expiresIn || process.env.JWT_EXPIRES_IN || '2h';
-    jwt.sign(payload, JWT_SECRET as jwt.Secret, { expiresIn: exp as any });
+    return jwt.sign(payload, JWT_SECRET as jwt.Secret, { expiresIn: exp as any });
 }
 
-export function verifyJwt(token: string) {
-    return jwt.verify(token, JWT_SECRET);
+export function verifyJwt(token: string): AuthUser | null {
+    try {
+        return jwt.verify(token, process.env.JWT_SECRET!) as AuthUser;
+    } catch (err) {
+        // Rethrow for specific error handling in middleware
+        throw err;
+    }
 }
