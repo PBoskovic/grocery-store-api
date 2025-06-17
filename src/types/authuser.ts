@@ -1,5 +1,6 @@
 export interface AuthUser {
-    userId: string;
+    _id: string;
+    // userId: string;
     role: string;
     nodeId: string;
 }
