@@ -10,7 +10,7 @@ export function signJwt(payload: string | Buffer | object, expiresIn?: string) {
 
 export function verifyJwt(token: string): AuthUser | null {
     try {
-        return jwt.verify(token, process.env.JWT_SECRET!) as AuthUser;
+        return jwt.verify(token, JWT_SECRET) as AuthUser;
     } catch (err) {
         // Rethrow for specific error handling in middleware
         throw err;
