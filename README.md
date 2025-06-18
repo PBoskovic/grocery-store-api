@@ -1,3 +1,4 @@
+[![CI](https://github.com/PBoskovic/grocery-store-api/actions/workflows/ci.yml/badge.svg)](https://github.com/PBoskovic/grocery-store-api/actions)
 
 # Grocery Store API
 
@@ -157,7 +158,6 @@ npm test
 
 
 ### CI/CD
-[![CI](https://github.com/PBoskovic/grocery-store-api/actions/workflows/ci.yml/badge.svg)](https://github.com/PBoskovic/grocery-store-api/actions)
 
 This project includes a GitHub Actions workflow for automated testing:
 
