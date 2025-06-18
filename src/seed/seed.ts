@@ -1,7 +1,6 @@
 import { connectMongo, disconnectMongo } from '../config/mongoose';
-import OrgNode from '../models/OrgNode';
+import OrgNode, {IOrgNode} from '../models/OrgNode';
 import User from '../models/User';
-import bcrypt from 'bcryptjs';
 
 import dotenv from 'dotenv';
 dotenv.config();
@@ -17,7 +16,7 @@ async function seed() {
     await User.deleteMany({});
 
     // Helper to create nodes by name, type, and parent
-    const nodes: Record<string, any> = {};
+    const nodes: Record<string, IOrgNode> = {};
 
     nodes['Srbija'] = await new OrgNode({ name: 'Srbija', type: 'office', parentId: null }).save();
 

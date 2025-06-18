@@ -21,6 +21,12 @@ const UserSchema = new Schema<IUser>({
     nodeId: { type: Schema.Types.ObjectId, ref: 'OrgNode', required: true }
 });
 
+UserSchema.methods.toJSON = function () {
+    const obj = this.toObject();
+    delete obj.password;
+    return obj;
+};
+
 UserSchema.pre('save', async function (next) {
     // Only hash if password was changed, or on new user
     if (!this.isModified('password')) return next();
@@ -30,7 +36,7 @@ UserSchema.pre('save', async function (next) {
         this.password = hash;
         next();
     } catch (err) {
-        next(err as any);
+        next(err as Error);
     }
 });
 

@@ -16,11 +16,10 @@ interface TestUser {
 describe('User Routes', () => {
     let adminToken: string;
     let managerToken: string;
-    let seeded: Awaited<ReturnType<typeof seedTestData>>;
 
     beforeEach(async () => {
 
-        seeded = await seedTestData();
+        await seedTestData();
         adminToken = await loginTestUser('admin@example.com', 'password');
         managerToken = await loginTestUser('vojvodina.manager@example.com', 'password');
     });

@@ -1,24 +1,23 @@
-import User from '../src/models/User';         // adjust the path if needed
-import OrgNode from '../src/models/OrgNode';
-import bcrypt from 'bcryptjs';
+import User, {IUser} from '../src/models/User';         // adjust the path if needed
+import OrgNode, {IOrgNode} from '../src/models/OrgNode';
 import request from 'supertest';
 import app from '../src/app';                  // your Express app
 
 // Types for easy reference
 interface SeededUsers {
-    admin: any,
-    managerVojvodina: any,
-    managerBezanija: any,
-    employeeStore1: any,
-    employeeStore2: any,
-    employeeBezanija: any
+    admin: IUser,
+    managerVojvodina: IUser,
+    managerBezanija: IUser,
+    employeeStore1: IUser,
+    employeeStore2: IUser,
+    employeeBezanija: IUser
 }
 interface SeededNodes {
-    srbija: any,
-    vojvodina: any,
-    bezanija: any,
-    store1: any,
-    store2: any
+    srbija: IOrgNode,
+    vojvodina: IOrgNode,
+    bezanija: IOrgNode,
+    store1: IOrgNode,
+    store2: IOrgNode
 }
 
 export async function seedTestData(): Promise<{ users: SeededUsers, nodes: SeededNodes }> {

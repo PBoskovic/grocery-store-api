@@ -22,7 +22,11 @@ export const login = async (req: Request, res: Response): Promise<void> => {
             token,
             user: { _id: user._id, name: user.name, email: user.email, role: user.role, nodeId: user.nodeId }
         });
-    } catch (err: any) {
-        res.status(500).json({ error: err.message });
+    } catch (err) {
+        if (err instanceof Error) {
+            res.status(500).json({ error: err.message });
+        } else {
+            res.status(500).json({ error: String(err) });
+        }
     }
 };
