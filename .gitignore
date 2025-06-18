@@ -18,3 +18,4 @@ init-project.sh
 
 .DS_Store
 
+dist/*

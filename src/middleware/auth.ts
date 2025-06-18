@@ -13,9 +13,13 @@ export function authenticateJWT(req: Request, res: Response, next: NextFunction)
 
     try {
         const decoded = verifyJwt(token);
-        (req as any).user = decoded;
+        if (!decoded) {
+            res.status(401).json({ error: 'Invalid token' });
+            return;
+        }
+        req.user = decoded;
         next();
-    } catch (err: any) {
+    } catch (err) {
         if (err instanceof TokenExpiredError) {
             res.status(401).json({ error: 'Token expired' });
             return;

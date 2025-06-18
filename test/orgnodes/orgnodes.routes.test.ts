@@ -1,9 +1,8 @@
-import mongoose from 'mongoose';
 import request from 'supertest';
 import '../setup';
 import app from '../../src/app'; // Make sure this is a default export!
 import { seedTestData, loginTestUser } from '../testUtils';
-import {OrgNode, User} from "../../src/models";
+import {OrgNode} from "../../src/models";
 
 interface TestUser {
     _id: string;
@@ -16,17 +15,16 @@ interface TestUser {
 describe('Orgnodes Routes', () => {
     let adminToken: string;
     let managerToken: string;
-    let seeded: Awaited<ReturnType<typeof seedTestData>>;
 
     beforeEach(async () => {
 
-        seeded = await seedTestData();
+        await seedTestData();
         adminToken = await loginTestUser('admin@example.com', 'password');
         managerToken = await loginTestUser('vojvodina.manager@example.com', 'password');
     });
 
     it('Admin can fetch all employees for a node and its descendants', async () => {
-        const adminToken = await loginTestUser('admin@example.com', 'password');
+        adminToken = await loginTestUser('admin@example.com', 'password');
         const node = await OrgNode.findOne({ name: 'Vojvodina' });
         if (!node) throw new Error('Node not found');
         const res = await request(app)
@@ -39,7 +37,7 @@ describe('Orgnodes Routes', () => {
     });
 
     it('Manager cannot fetch employees outside their subtree', async () => {
-        const managerToken = await loginTestUser('vojvodina.manager@example.com', 'password');
+        managerToken = await loginTestUser('vojvodina.manager@example.com', 'password');
         const outOfScopeNode = await OrgNode.findOne({ name: 'Bezanija' }); // Assume Bezanija is NOT in their subtree
         if (!outOfScopeNode) throw new Error('Node not found');
         await request(app)
@@ -49,7 +47,7 @@ describe('Orgnodes Routes', () => {
     });
 
     it('Manager can fetch employees in their own subtree', async () => {
-        const managerToken = await loginTestUser('vojvodina.manager@example.com', 'password');
+        managerToken = await loginTestUser('vojvodina.manager@example.com', 'password');
         const node = await OrgNode.findOne({ name: 'Vojvodina' }); // This node IS in subtree
         if (!node) throw new Error('Node not found');
         const res = await request(app)

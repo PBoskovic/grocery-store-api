@@ -21,7 +21,10 @@ export const getEmployees = async (req: Request, res: Response) => {
   if (currentUser.role !== 'admin') {
     // All requested nodes must be within permittedNodes
     if (!nodeIds.every(id => permittedNodes.includes(id))) {
-      return res.status(403).json({ error: 'Forbidden: Node not in your scope' });
+      {
+        res.status(403).json({ error: 'Forbidden: Node not in your scope' });
+        return;
+      }
     }
   }
 
@@ -47,13 +50,15 @@ export const getManagers = async (req: Request, res: Response) => {
 
   if (currentUser.role !== 'admin') {
     if (!nodeIds.every(id => permittedNodes.includes(id))) {
-      return res.status(403).json({ error: 'Forbidden: Node not in your scope' });
+      res.status(403).json({ error: 'Forbidden: Node not in your scope' });
+      return;
     }
   }
 
   // Only managers can see managers, or admin
   if (currentUser.role === 'employee') {
-    return res.status(403).json({ error: 'Employees cannot view managers' });
+    res.status(403).json({ error: 'Employees cannot view managers' });
+    return;
   }
 
   const users = await User.find({
